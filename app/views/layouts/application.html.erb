@@ -10,6 +10,18 @@
   </head>
 
   <body>
+    <div class="main_container">
+      <%unless user_signed_in?%>
+        <%= render 'layouts/devise' %>
+      <%end%>
+      <div class="text-right">
+        <% if user_signed_in? %>
+          <%= link_to('Home', root_path) %> |
+          <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
+        <% end %>
+      </div>
+    <%= render 'layouts/toastr' %>
     <%= yield %>
+  </div>
   </body>
 </html>
