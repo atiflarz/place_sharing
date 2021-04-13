@@ -30,9 +30,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'devise'
 gem 'devise-bootstrap-views'
 gem 'simple_form'
-gem 'nested_form'
 gem 'faker'
-gem 'select2-rails'
+gem 'cocoon'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

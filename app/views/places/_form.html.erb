@@ -1,0 +1,71 @@
+<%= simple_form_for place, url: places_path, method: :post  do |form| %>
+  <div class="form-group">
+    <%= form.input :latitude, as: :hidden%>
+  </div>
+  <div class="form-group">
+    <%= form.input :longitude, as: :hidden%>
+  </div>
+  <p>
+    <div id="map2"></div>
+  </p>
+  <div class="form-check">
+    <%= form.input :is_public, as: :boolean, class: "form-check-input"%>
+  </div>
+  <div class="tab-pane" id="people">
+      <%= form.simple_fields_for :place_recipients do |pr| %>
+        <div class="field">
+          <%= render 'place_recipient_fields', f: pr %>
+      </div>
+      <% end %>
+      <div class="links">
+        <%= link_to_add_association 'add recepient', form, :place_recipients %>
+      </div>
+    </div>
+  <div class="actions">
+    <%= form.submit "Share Location" %>
+  </div>
+<% end %>
+<script>
+
+  initMap2(<%=raw @places.to_json%>, 'map2');
+
+  $(document).ready(function() {
+    $("#place_is_public").change(function(e) {
+      if ($(this).prop('checked')){
+        $(".add_fields").hide();
+      }
+      else{
+        $(".add_fields").show();
+      }
+    });
+  });
+
+  function initMap2(places, id){
+    console.log(places)
+    if (places.length == 0){
+      places = [{latitude: 22.578193, longitude: 88.428619}]
+    }
+    var map = new google.maps.Map(document.getElementById('map2'), {
+      zoom: 4,
+      center: new google.maps.LatLng(places[0].latitude, places[0].longitude),
+    });
+    var markers;
+    for (i = 0; i < places.length; i++) {
+      markers = new google.maps.Marker({
+        position: new google.maps.LatLng(places[i].latitude, places[i].longitude),
+        map: map,
+        animation: google.maps.Animation.DROP,
+        draggable: true
+      });
+      google.maps.event.addListener(markers, "dragend", function(){
+        var lat = document.getElementById('place_latitude');
+        var lng = document.getElementById('place_longitude');
+        var coords = this.getPosition()
+        lat.value = coords.lat();
+        lng.value = coords.lng();
+      });
+    }
+    
+  }
+</script>
+

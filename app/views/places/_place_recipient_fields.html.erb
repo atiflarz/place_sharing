@@ -1,0 +1,4 @@
+<div class="nested-fields">
+  <%= f.input :recipient_id, as: :select, collection: users_list, prompt: 'Select User' %>
+  <%= link_to_remove_association "remove recepient", f %>
+</div>

@@ -10,10 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_11_085919) do
+ActiveRecord::Schema.define(version: 2021_04_11_113654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "place_recipients", force: :cascade do |t|
+    t.bigint "place_id"
+    t.bigint "recipient_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["place_id"], name: "index_place_recipients_on_place_id"
+    t.index ["recipient_id"], name: "index_place_recipients_on_recipient_id"
+  end
+
+  create_table "places", force: :cascade do |t|
+    t.string "latitude", null: false
+    t.string "longitude", null: false
+    t.bigint "user_id"
+    t.boolean "is_public", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_places_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -28,4 +47,5 @@ ActiveRecord::Schema.define(version: 2021_04_11_085919) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "place_recipients", "users", column: "recipient_id"
 end
